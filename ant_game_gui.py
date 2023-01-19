@@ -26,6 +26,7 @@ rect_thickness = 2
 
 ant_size = (55, 55)
 
+
 class Ant:
     x = rect_pos_1[0]
     y = rect_pos_1[1]
@@ -58,6 +59,10 @@ class App:
         self._display_surf = None
         self._image_surf = None
         self.ant = Ant()
+        self.clock = None
+        self.timer_event = None
+        self.timer_duration = 60
+
 
     def on_init(self):
         pygame.init()
@@ -70,6 +75,9 @@ class App:
         self._image_surf = pygame.transform.scale(self._image_surf, ant_size)
         self.ant_rect = self._image_surf.get_rect()
         self.ant_rect.center = (30, 170)
+        self.clock = pygame.time.Clock() # Create a clock object to track the elapsed time
+        self.timer_event = pygame.USEREVENT+1
+        pygame.time.set_timer(self.timer_event, 1000)
 
     def on_event(self, event):
         if event.type == QUIT:
@@ -123,10 +131,8 @@ class App:
 
         # Timer
         timer_font = pygame.font.Font(None, 40)
-        duration = 60 # Set the duration of the timer in seconds
-        clock = pygame.time.Clock() # Create a clock object to track the elapsed time
-        counter, text = 10, '10'.rjust(3)
-        pygame.time.set_timer(pygame.USEREVENT, 1000)
+        clock_text = level_font.render(str(self.timer_duration), True, text_color)
+        clock_pose = (595, 225)
 
         # Draw the background
         self._display_surf.fill((255,255,255))
@@ -149,6 +155,7 @@ class App:
 
         # Blit the text surface to the window
         self._display_surf.blit(level_text,level_pose)
+        self._display_surf.blit(clock_text, clock_pose)
         self._display_surf.blit(score_text,score_pose)
 
         # Blit the sugar icon to the window
@@ -169,7 +176,16 @@ class App:
             self._running = False
 
         while( self._running ):
+            self.clock.tick(60)
             pygame.event.pump()
+
+            for event in pygame.event.get():
+                if event.type == self.timer_event:
+                    self.timer_duration -= 1
+                    if self.timer_duration < 0:
+                        self.timer_duration = 60
+                        pygame.time.set_timer(self.timer_event, 1000)
+
             keys = pygame.key.get_pressed()
 
             if (keys[K_RIGHT]):
