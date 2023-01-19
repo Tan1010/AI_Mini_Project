@@ -35,22 +35,18 @@ class Ant:
         # if self.x < 475:
         if self.x < rect_pos_1[0] + rect_size_1[0] - ant_size[0]:
             self.x = self.x + self.speed
-            print(f'self.x: {self.x}')
 
     def moveLeft(self):
         if self.x > rect_pos_1[0]:
             self.x = self.x - self.speed
-            print(f'self.x: {self.x}')
 
     def moveUp(self):
         if self.y > rect_pos_1[1]:
             self.y = self.y - self.speed
-            print(f'self.y: {self.y}')
 
     def moveDown(self):
         if self.y < rect_pos_1[1] + rect_size_1[1] - ant_size[1]:
             self.y = self.y + self.speed
-            print(f'self.y: {self.y}')
 
 class App:
     windowWidth = 700
@@ -126,9 +122,11 @@ class App:
 
 
         # Timer
-        # timer_font = pygame.font.Font(None, 40)
-        # duration = 60 # Set the duration of the timer in seconds
-        # clock = pygame.time.Clock() # Create a clock object to track the elapsed time
+        timer_font = pygame.font.Font(None, 40)
+        duration = 60 # Set the duration of the timer in seconds
+        clock = pygame.time.Clock() # Create a clock object to track the elapsed time
+        counter, text = 10, '10'.rjust(3)
+        pygame.time.set_timer(pygame.USEREVENT, 1000)
 
         # Draw the background
         self._display_surf.fill((255,255,255))
@@ -175,19 +173,15 @@ class App:
             keys = pygame.key.get_pressed()
 
             if (keys[K_RIGHT]):
-                print('right')
                 self.ant.moveRight()
 
             if (keys[K_LEFT]):
-                print('left')
                 self.ant.moveLeft()
 
             if (keys[K_UP]):
-                print('up')
                 self.ant.moveUp()
 
             if (keys[K_DOWN]):
-                print('down')
                 self.ant.moveDown()
 
             if (keys[K_ESCAPE]):
