@@ -24,7 +24,7 @@ rect_pos_6 = (560, 595)
 rect_color = (92, 64, 51) # Dark Brown
 rect_thickness = 2
 
-ant_size = (55, 55)
+ant_size = (20, 20)
 
 
 class Ant:
@@ -33,7 +33,6 @@ class Ant:
     speed = 5
 
     def moveRight(self):
-        # if self.x < 475:
         if self.x < rect_pos_1[0] + rect_size_1[0] - ant_size[0]:
             self.x = self.x + self.speed
 
@@ -58,21 +57,27 @@ class App:
         self._running = True
         self._display_surf = None
         self._image_surf = None
+        self._image_surf_copy = None
         self.ant = Ant()
         self.clock = None
         self.timer_event = None
         self.timer_duration = 60
+        self.isRight = True
 
 
     def on_init(self):
         pygame.init()
+
         self._display_surf = pygame.display.set_mode((self.windowWidth,self.windowHeight), pygame.HWSURFACE)
 
         pygame.display.set_caption('The Ant Game')
         self._running = True
 
         self._image_surf = pygame.image.load("ant.png").convert()
+        self._image_surf.set_colorkey((0, 0, 0), RLEACCEL)
         self._image_surf = pygame.transform.scale(self._image_surf, ant_size)
+        self._image_surf_copy = self._image_surf.copy()
+        self._image_surf_right = pygame.transform.flip(self._image_surf_copy, True, False)
         self.ant_rect = self._image_surf.get_rect()
         self.ant_rect.center = (30, 170)
         self.clock = pygame.time.Clock() # Create a clock object to track the elapsed time
@@ -163,8 +168,11 @@ class App:
         self._display_surf.blit(sugar_image, sugar_rect_2)
 
         # Blit the ant icon to the window
-        self._display_surf.blit(self._image_surf, (self.ant.x,self.ant.y))
-
+        # self._display_surf.blit(self._image_surf_right, (self.ant.x,self.ant.y))
+        if self.isRight:
+            self._display_surf.blit(self._image_surf_right, (self.ant.x,self.ant.y))
+        else:
+            self._display_surf.blit(self._image_surf, (self.ant.x,self.ant.y))
         # Update the display
         pygame.display.flip()
 
@@ -189,9 +197,11 @@ class App:
             keys = pygame.key.get_pressed()
 
             if (keys[K_RIGHT]):
+                self.isRight = True
                 self.ant.moveRight()
 
             if (keys[K_LEFT]):
+                self.isRight = False
                 self.ant.moveLeft()
 
             if (keys[K_UP]):
