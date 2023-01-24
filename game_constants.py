@@ -1,5 +1,8 @@
 from enum import Enum
 
+# Gameplay
+TIMER_DURATION = 60
+
 # Display
 DISPLAY_DIM = (700, 700)
 

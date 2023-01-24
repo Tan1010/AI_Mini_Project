@@ -9,13 +9,13 @@ from Agent.ant import Ant
 from game_constants import (DARK_BROWN, DARKER_BROWN, DISPLAY_DIM, GAME_TITLE,
                             GAME_TITLE_POS, LEVEL_POS, RECT_DIM, RECT_POS,
                             RECT_THICKNESS, SCORE_POS, SUGAR_CENTER_1,
-                            SUGAR_CENTER_2, SUGAR_COUNT, TIMER_POS, TITLE,
-                            TITLE_POS, WHITE, Direction)
+                            SUGAR_CENTER_2, SUGAR_COUNT, TIMER_DURATION,
+                            TIMER_POS, TITLE, TITLE_POS, WHITE, Direction)
 from MazeGenerator.maze import Maze
 
 
 class Game:
-    def __init__(self, display=True, maze_type='rb', ant_type=''):
+    def __init__(self, display=True, maze_type='rb', ant_type='human'):
         # Initialize the game
         pygame.init()
         self.clock = pygame.time.Clock() 
@@ -33,11 +33,12 @@ class Game:
         self.next_level = True 
         
         # Timer
-        self.timer_duration = 60
+        self.timer_duration = TIMER_DURATION
         self.timer_event = pygame.USEREVENT + 1
         pygame.time.set_timer(self.timer_event, 1000)
     
     def initialize_display(self):
+        # add bgm here
         if self.display:
             self.screen = pygame.display.set_mode(DISPLAY_DIM)
             self.screen.fill(WHITE)
@@ -75,12 +76,16 @@ class Game:
         self.next_level = False     # TODO prompt AI to turn_off_display
         move = False
         ant_neighbour = self.maze.get_ant_neighbour(direction)
+        # 0: path, 1: wall, 2: home, 3: sugar, 4: ant
         if ant_neighbour == 0:
+            # encounter path
             move = True
         if ant_neighbour == 2:
+            # sent sugar home, can add bool variable for music
             self.score += self.sugar_hold
             self.sugar_hold = 0
         if ant_neighbour == 3 and self.sugar_hold < 2:
+            # get sugar, can add bool variable for music
             self.sugar_hold += 1
             move = True
         if move:
@@ -95,10 +100,12 @@ class Game:
 
         if self.screen:
             if self.next_level:
+                # add music here (advance to next level)
                 self.maze.initialize_display(self.screen)
                 self.ant = Ant(self.screen, self.maze)
             else:
                 self.ant.update_orientation(direction)
+            # add conditional code here to add music here (get/return sugar)
             self.update_display()
 
     def update_display(self):
@@ -152,6 +159,8 @@ class Game:
 
             # waiting user to quit game when time is out
             if self.timer_duration == 0:
+                # add end game text here
+                # end game music here
                 continue
 
             pressed_keys = pygame.key.get_pressed()
@@ -171,5 +180,5 @@ class Game:
 
 
 if __name__ == '__main__':
-    game = Game()
+    game = Game(maze_type='krus')
     game.run()
