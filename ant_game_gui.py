@@ -73,7 +73,7 @@ class App:
         pygame.display.set_caption('The Ant Game')
         self._running = True
 
-        self._image_surf = pygame.image.load("ant.png").convert()
+        self._image_surf = pygame.image.load("Assets/ant.png").convert()
         self._image_surf.set_colorkey((0, 0, 0), RLEACCEL)
         self._image_surf = pygame.transform.scale(self._image_surf, ant_size)
         self._image_surf_copy = self._image_surf.copy()
@@ -126,7 +126,7 @@ class App:
         score_pose = (570, 360)
 
         # Load sugar icon image
-        sugar_image = pygame.image.load("sugar_3.png")
+        sugar_image = pygame.image.load("Assets/sugar.png")
         sugar_image = pygame.transform.scale(sugar_image, (55,55))
         sugar_rect = sugar_image.get_rect()
         sugar_rect.center = (615, 500)
