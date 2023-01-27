@@ -67,6 +67,9 @@ class App:
 
     def on_init(self):
         pygame.init()
+        pygame.mixer.init()
+        pygame.mixer.music.load("main_bgm.mp3")
+        pygame.mixer.music.play(loops=-1)
 
         self._display_surf = pygame.display.set_mode((self.windowWidth,self.windowHeight), pygame.HWSURFACE)
 
