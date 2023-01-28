@@ -1,3 +1,5 @@
+""" Adapted from https://github.com/john-science/mazelib """
+
 from .MazeSolveAlgo import MazeSolveAlgo
 
 class BFSSolver(MazeSolveAlgo):

@@ -1,3 +1,5 @@
+""" Adapted from https://github.com/john-science/mazelib """
+
 from random import choice
 from .MazeSolveAlgo import MazeSolveAlgo
 

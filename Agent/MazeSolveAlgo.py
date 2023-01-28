@@ -1,3 +1,5 @@
+""" Adapted from https://github.com/john-science/mazelib """
+
 import abc
 
 import numpy as np
