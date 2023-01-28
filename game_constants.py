@@ -1,6 +1,7 @@
 from enum import Enum
 
 # Gameplay
+FPS = 60
 TIMER_DURATION = 60
 
 # Display
@@ -17,6 +18,7 @@ SUGAR_COUNT = 20
 # Color
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
+RED = (255, 0, 0)
 DARK_BROWN = (92, 64, 51) 
 DARKER_BROWN = (48, 19, 1)
 

@@ -19,10 +19,6 @@ class MazeGenAlgo:
     def generate(self):
         return None
 
-    """ All of the methods below this are helper methods,
-    common to many maze-generating algorithms.
-    """
-
     def _find_neighbors(self, r, c, grid, is_wall=False):
         """Find all the grid neighbors of the current position; visited, or not.
 

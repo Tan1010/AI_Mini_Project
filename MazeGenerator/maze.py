@@ -1,5 +1,3 @@
-from sys import exit
-
 import numpy as np
 import pygame
 from PIL import Image
@@ -8,8 +6,8 @@ from scipy import signal
 from game_constants import (BLOCK_DIM, DARK_BROWN, MAZE_POS, MAZE_SIZE,
                             SUGAR_COUNT, WHITE)
 
-from .Kruskal import Kruskal
-from .RecursiveBacktracking import RecursiveBacktracking
+from .kruskal import Kruskal
+from .recursive_backtracking import RecursiveBacktracking
 
 
 class Maze:
@@ -22,13 +20,13 @@ class Maze:
         self.blocks = self.maze_generator.generate()
         # Evaluate maze
         if evaluate:
-            print(f'Maze: score = {self.evaluate()}')
+            print(f'Maze score = {self.evaluate()}')
         # Generate home and ant spawn point
-        self.blocks[1, 0] = 2   # home
+        self.blocks[1, 0] = 2  # home
         self.blocks[1, 1] = 4  # ant spawn point
         # Generate sugars
         flatten = self.blocks.reshape(-1)
-        flatten[np.random.choice(np.where(flatten == 0)[0], SUGAR_COUNT)] = 3  # replace SUGAR_COUNT = 20 path cells with sugars
+        flatten[np.random.choice(np.where(flatten == 0)[0], SUGAR_COUNT, replace=False)] = 3  # replace SUGAR_COUNT = 20 path cells with sugars
 
     def initialize_display(self, screen):
         self.screen = screen 
@@ -36,7 +34,7 @@ class Maze:
         sugar_img_arr = np.array(Image.open('Assets\sugar_small.jpg').convert('RGB'))
         home_img_arr = np.array(Image.open('Assets\home.jpg').convert('RGB'))
         # Wall
-        surface_arr = np.zeros((*self.block_size, 3), dtype=np.int16) + 255
+        surface_arr = np.zeros((*self.block_size, 3), dtype=np.uint8) + 255
         surface_arr[self.blocks==1] = wall_color
         surface_arr = surface_arr.repeat(BLOCK_DIM, axis=0).repeat(BLOCK_DIM, axis=1)
         # Home
@@ -65,68 +63,10 @@ class Maze:
 
     def update(self, direction):
         ant_pos = np.where(self.blocks==4)
-        ant_y = ant_pos[0].item()
-        ant_x = ant_pos[1].item()
+        ant_y, ant_x= ant_pos[0].item(), ant_pos[1].item()
         ant_dy, ant_dx = direction.value
         if self.screen:
             pygame.draw.rect(self.screen, WHITE, pygame.Rect(
                 MAZE_POS[0]+ant_x*BLOCK_DIM, MAZE_POS[1]+ant_y*BLOCK_DIM, BLOCK_DIM, BLOCK_DIM))
-            if self.blocks[ant_y+ant_dy][ant_x+ant_dx] == 3:
-                pygame.draw.rect(self.screen, WHITE, pygame.Rect(
-                    MAZE_POS[0]+(ant_x+ant_dx)*BLOCK_DIM, MAZE_POS[1]+(ant_y+ant_dy)*BLOCK_DIM, BLOCK_DIM, BLOCK_DIM))
         self.blocks[ant_y+ant_dy][ant_x+ant_dx] = 4
         self.blocks[ant_y][ant_x] = 0
-
-# # To be removed
-# if __name__ == '__main__':
-
-#     # Run and display the Maze.
-#     # Left mouse button or space bar: generate a new maze. 
-#     # ESC or close the window: Quit.
-
-#     # Set screen size and initialize it
-#     pygame.display.init()
-
-#     # Setup the clock for a decent framerate TODO
-#     clock = pygame.time.Clock()
-
-#     block_dim = 20  # block size in pixels
-#     disp_size = (700, 700)
-#     screen = pygame.display.set_mode(disp_size)
-#     pygame.display.set_caption('Ant Game')
-#     running = True
-
-#     while running:
-#         maze = Maze(screen)  # Change Maze Generator Algo here 
-#         screen.fill((255, 255, 255))
-
-#         start_time = pygame.time.get_ticks()
-#         print(f'Generating a maze of {maze.block_size[1]} x {maze.block_size[0]} = {maze.block_size[0] * maze.block_size[1]} cells.')
-#         maze.initialize()
-#         maze.update_display()
-#         print('Ready. Time: {:0.4f} seconds.'.format((pygame.time.get_ticks() - start_time) / 1000.0))
-#         print('ESC or close the Maze window to end program.')
-#         print(maze.blocks[:,:])
-        
-#         pygame.event.clear()
-#         pausing = running    
-#         while pausing:
-#             event = pygame.event.wait()  # wait for user input, yielding to other prcesses
-#             if event.type == pygame.QUIT:
-#                 pausing = False
-#                 running = False
-#             elif event.type == pygame.KEYDOWN:
-#                 if event.key == pygame.K_SPACE:
-#                     pausing = False
-#                 if event.key == pygame.K_ESCAPE:
-#                     pausing = False
-#                     running = False
-#             elif event.type == pygame.MOUSEBUTTONDOWN:
-#                 if event.button == 1:
-#                     # left button: new maze
-#                     pausing = False
-
-#     # exit; close display
-#     pygame.quit()
-#     exit()
-

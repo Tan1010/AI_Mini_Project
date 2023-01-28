@@ -17,7 +17,7 @@ class Kruskal(MazeGenAlgo):
             np.array: returned matrix
         """
         # create empty grid
-        grid = np.empty((self.H, self.W), dtype=np.int8)
+        grid = np.empty((self.H, self.W), dtype=np.uint8)
         grid.fill(1)
 
         forest = []

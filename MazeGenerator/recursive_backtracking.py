@@ -26,7 +26,7 @@ class RecursiveBacktracking(MazeGenAlgo):
             np.array: returned matrix
         """
         # create empty grid, with walls
-        grid = np.empty((self.H, self.W), dtype=np.int8)
+        grid = np.empty((self.H, self.W), dtype=np.uint8)
         grid.fill(1)
 
         crow = randrange(1, self.H, 2)

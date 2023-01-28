@@ -1,21 +1,22 @@
 from sys import exit
 
-import numpy as np
 import pygame
 from pygame.locals import (K_DOWN, K_ESCAPE, K_LEFT, K_RIGHT, K_UP, KEYDOWN,
                            QUIT)
 
-from Agent.ant import Ant
-from game_constants import (DARK_BROWN, DARKER_BROWN, DISPLAY_DIM, GAME_TITLE,
-                            GAME_TITLE_POS, LEVEL_POS, RECT_DIM, RECT_POS,
-                            RECT_THICKNESS, SCORE_POS, SUGAR_CENTER_1,
-                            SUGAR_CENTER_2, SUGAR_COUNT, TIMER_DURATION,
-                            TIMER_POS, TITLE, TITLE_POS, WHITE, Direction)
+from Agent.agent import agent
+from ant import Ant
+from game_constants import (DARK_BROWN, DARKER_BROWN, DISPLAY_DIM, FPS,
+                            GAME_TITLE, GAME_TITLE_POS, LEVEL_POS, RECT_DIM,
+                            RECT_POS, RECT_THICKNESS, SCORE_POS,
+                            SUGAR_CENTER_1, SUGAR_CENTER_2, SUGAR_COUNT,
+                            TIMER_DURATION, TIMER_POS, TITLE, TITLE_POS, WHITE,
+                            Direction)
 from MazeGenerator.maze import Maze
 
 
 class Game:
-    def __init__(self, display=True, maze_type='rb', ant_type='human'):
+    def __init__(self, display=True, maze_type='rb', agent_type='human'):
         # Initialize the game
         pygame.init()
         self.clock = pygame.time.Clock() 
@@ -23,7 +24,6 @@ class Game:
         self.running = True
         self.display = display
         self.maze_type = maze_type
-        self.ant_type = ant_type
 
         # Maze and game states
         self.maze = Maze(method=self.maze_type, evaluate=True)
@@ -31,6 +31,10 @@ class Game:
         self.score = 0
         self.sugar_hold = 0
         self.next_level = True 
+
+        # Agent
+        self.agent = agent(agent_type)
+        self.directions = []  # for AI agents
         
         # Timer
         self.timer_duration = TIMER_DURATION
@@ -143,6 +147,7 @@ class Game:
     
     def run(self):
         self.initialize_display()
+        
         while(self.running):
             pygame.event.pump()
             for event in pygame.event.get():
@@ -162,23 +167,29 @@ class Game:
                 # add end game text here
                 # end game music here
                 continue
+                        
+            if self.agent:
+                if not self.directions:
+                    self.directions += self.agent.solve(self)
+                self.update_game(self.directions.pop(0))
+            
+            else:
+                pressed_keys = pygame.key.get_pressed()
+                if (pressed_keys[K_UP]):
+                    self.update_game(Direction.UP)
+                elif (pressed_keys[K_LEFT]):
+                    self.update_game(Direction.LEFT)
+                elif (pressed_keys[K_DOWN]):
+                    self.update_game(Direction.DOWN)
+                elif (pressed_keys[K_RIGHT]):
+                    self.update_game(Direction.RIGHT)
 
-            pressed_keys = pygame.key.get_pressed()
-            if (pressed_keys[K_UP]):
-                self.update_game(Direction.UP)
-            elif (pressed_keys[K_LEFT]):
-                self.update_game(Direction.LEFT)
-            elif (pressed_keys[K_DOWN]):
-                self.update_game(Direction.DOWN)
-            elif (pressed_keys[K_RIGHT]):
-                self.update_game(Direction.RIGHT)
-
-            self.clock.tick(10)
+            self.clock.tick(FPS)
 
         pygame.quit()
         exit()
 
 
 if __name__ == '__main__':
-    game = Game(maze_type='krus')
+    game = Game(maze_type='krus', agent_type='bfs')
     game.run()
