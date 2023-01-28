@@ -69,12 +69,17 @@ class Game:
         self.update_display()
 
         # Music
+        pygame.mixer.music.set_volume(0.2)
         pygame.mixer.music.load("Assets/main_bgm.mp3")
         pygame.mixer.music.play(loops=-1)
         self.take_sugar_bgm = pygame.mixer.Sound("Assets/take_sugar_bgm.mp3")
+        self.take_sugar_bgm.set_volume(0.1)
         self.put_sugar_at_home_bgm = pygame.mixer.Sound("Assets/put_sugar_at_home_bgm.mp3")
+        self.put_sugar_at_home_bgm.set_volume(0.1)
         self.next_game_bgm = pygame.mixer.Sound("Assets/next_game_bgm.mp3")
+        self.next_game_bgm.set_volume(0.1)
         self.game_over_bgm = pygame.mixer.Sound("Assets/game_over_bgm.mp3")
+        self.game_over_bgm.set_volume(0.1)
 
         pygame.display.update()
 
