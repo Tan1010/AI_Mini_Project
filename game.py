@@ -79,7 +79,7 @@ class Game:
         self.next_game_bgm = pygame.mixer.Sound("Assets/next_game_bgm.mp3")
         self.next_game_bgm.set_volume(0.1)
         self.game_over_bgm = pygame.mixer.Sound("Assets/game_over_bgm.mp3")
-        self.game_over_bgm.set_volume(0.1)
+        self.game_over_bgm.set_volume(0.2)
 
         pygame.display.update()
 
@@ -152,6 +152,7 @@ class Game:
 
     def run(self):
         self.initialize_display()
+        gg_flag = False
         while(self.running):
             pygame.event.pump()
             for event in pygame.event.get():
@@ -168,13 +169,15 @@ class Game:
 
             # waiting user to quit game when time is out
             if self.duration == 0:
-                self.game_over_bgm.play()
-                gg_font = pygame.font.Font(None, 100)
-                gg_text = gg_font.render("GAMEOVER", True, RED)
-                pygame.draw.rect(self.screen, LIGHT_RED, pygame.Rect(
-                    55, 370, 450, 100))
-                self.screen.blit(gg_text, (80, 390))
-                pygame.display.update()
+                if not gg_flag:
+                    self.game_over_bgm.play(loops=-1)
+                    gg_font = pygame.font.Font(None, 100)
+                    gg_text = gg_font.render("GAMEOVER", True, RED)
+                    pygame.draw.rect(self.screen, LIGHT_RED, pygame.Rect(
+                        55, 370, 450, 100))
+                    self.screen.blit(gg_text, (80, 390))
+                    pygame.display.update()
+                    gg_flag = True
                 continue
                         
             if self.agent:
