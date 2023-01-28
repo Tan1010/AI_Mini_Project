@@ -19,7 +19,7 @@ SUGAR_COUNT = 20
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)
-DARK_BROWN = (92, 64, 51) 
+DARK_BROWN = (92, 64, 51)
 DARKER_BROWN = (48, 19, 1)
 
 # Rectangle
@@ -31,7 +31,7 @@ RECT_POS = [(560, 75), (560, 205), (560, 335), (560, 465), (560, 595)]
 GAME_TITLE = "THE ANT GAME"
 GAME_TITLE_POS = (90, 80)
 
-# Title 
+# Title
 TITLE = ["LEVEL", "TIME", "SCORE", "SUGAR 1", "SUGAR 2"]
 TITLE_POS = [(560, 50), (560, 180), (560, 310), (560, 440), (560, 570)]
 

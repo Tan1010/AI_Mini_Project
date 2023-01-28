@@ -19,7 +19,16 @@ class Game:
     def __init__(self, display=True, maze_type='rb', agent_type='human'):
         # Initialize the game
         pygame.init()
-        self.clock = pygame.time.Clock() 
+
+        pygame.mixer.music.load("main_bgm.mp3")
+        pygame.mixer.music.play(loops=-1)
+
+        self.take_sugar_bgm = pygame.mixer.Sound("take_sugar_bgm.mp3")
+        self.put_sugar_at_home_bgm = pygame.mixer.Sound("put_sugar_at_home_bgm.mp3")
+        self.next_game_bgm = pygame.mixer.Sound("next_game_bgm.mp3")
+        self.game_over_bgm = pygame.mixer.Sound("game_over_bgm.mp3")
+
+        self.clock = pygame.time.Clock()
         self.screen = None
         self.running = True
         self.display = display
@@ -40,7 +49,7 @@ class Game:
         self.timer_duration = TIMER_DURATION
         self.timer_event = pygame.USEREVENT + 1
         pygame.time.set_timer(self.timer_event, 1000)
-    
+
     def initialize_display(self):
         # add bgm here
         if self.display:
@@ -51,7 +60,7 @@ class Game:
             # Maze and Ant
             self.maze.initialize_display(self.screen)
             self.ant = Ant(self.screen, self.maze)
-            
+
             # All titles
             game_title_font = pygame.font.Font(None, 70)
             game_title_surface = game_title_font.render(GAME_TITLE, True, DARKER_BROWN)
@@ -87,10 +96,13 @@ class Game:
         if ant_neighbour == 2:
             # sent sugar home, can add bool variable for music
             self.score += self.sugar_hold
+            if self.sugar_hold != 0:
+                self.put_sugar_at_home_bgm.play()
             self.sugar_hold = 0
         if ant_neighbour == 3 and self.sugar_hold < 2:
             # get sugar, can add bool variable for music
             self.sugar_hold += 1
+            self.take_sugar_bgm.play()
             move = True
         if move:
             self.maze.update(direction)
@@ -105,6 +117,7 @@ class Game:
         if self.screen:
             if self.next_level:
                 # add music here (advance to next level)
+                self.next_game_bgm.play()
                 self.maze.initialize_display(self.screen)
                 self.ant = Ant(self.screen, self.maze)
             else:
@@ -144,7 +157,7 @@ class Game:
             RECT_POS[1][0]+5, RECT_POS[1][1]+5, RECT_DIM[0]-10, RECT_DIM[1]-10))
         self.screen.blit(timer_text, TIMER_POS)
         pygame.display.update()
-    
+
     def run(self):
         self.initialize_display()
         
@@ -166,6 +179,7 @@ class Game:
             if self.timer_duration == 0:
                 # add end game text here
                 # end game music here
+                self.game_over_bgm.play()
                 continue
                         
             if self.agent:
