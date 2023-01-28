@@ -163,7 +163,7 @@ class Game:
 
             # waiting user to quit game when time is out
             if self.duration == 0:
-                # self.game_over_bgm.play()
+                self.game_over_bgm.play()
                 gg_font = pygame.font.Font(None, 100)
                 gg_text = gg_font.render("GAMEOVER", True, RED)
                 pygame.draw.rect(self.screen, LIGHT_RED, pygame.Rect(
