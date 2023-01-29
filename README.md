@@ -3,8 +3,8 @@ WID3009 ARTIFICIAL INTELLIGENCE GAME PROGRAMMING
 
 #### Quick instruction:
 - Install base conda environment with python version >= 3.7
-- Run `pip install -r requirements.txt` to install necessary package 
 - `cd` to this repo
+- Run `pip install -r requirements.txt` to install necessary package 
 - Run `python game.py`
 - Follow the prompt to set up the game
 - Have fun!!
